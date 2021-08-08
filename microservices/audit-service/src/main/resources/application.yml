@@ -1,0 +1,71 @@
+server.port: 7003
+spring.application.name: audit-service
+spring:
+#  profiles.active: dev
+  jpa:
+    properties:
+      hibernate.format_sql: true
+    generate-ddl: false
+    open-in-view: false         
+    hibernate:                 
+      ddl-auto: create  
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
+
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+
+app:
+  prod: false
+  defaultPageSize: 10
+  eureka-server: localhost
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+ribbon.ServerListRefreshInterval: 5000
+ribbon.NFLoadBalancerPingInterval: 5
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings.input:
+    destination: audit-support
+    group: auditGroup
+
+spring.cloud.stream.bindings.input.consumer:
+  maxAttempts: 3
+  backOffInitialInterval: 500
+  backOffMaxInterval: 1000
+  backOffMultiplier: 2.0
+
+spring.cloud.stream.rabbit.bindings.input.consumer:
+  autoBindDlq: true
+  republishToDlq: true
+
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+        
+
+---
+spring.profiles: docker
+
+spring.rabbitmq.host: rabbitmq
+
+app.eureka-server: service-discovery
+  

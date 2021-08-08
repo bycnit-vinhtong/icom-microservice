@@ -1,0 +1,53 @@
+spring:
+#  profiles.active: dev
+  jpa:
+    properties:
+      hibernate.format_sql: false
+    generate-ddl: true
+    open-in-view: false         
+    hibernate:                 
+      ddl-auto: create  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+
+app:
+  prod: false
+  defaultPageSize: 10
+  inventory-service:
+    host: http://INVENTORY-SERVICE/inventory
+  eureka-server: localhost    
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+ribbon.ServerListRefreshInterval: 5000
+ribbon.NFLoadBalancerPingInterval: 5
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings:
+    output-audit:
+      destination: audit-support
+      producer:
+        required-groups: auditGroup
+
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest

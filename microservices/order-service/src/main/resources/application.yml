@@ -1,0 +1,91 @@
+server.port: 7004
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+spring.application.name: order-service
+
+app:
+  message: hello order service
+  prod: false
+  defaultPageSize: 10
+  eureka-server: localhost
+  oauth2-host: localhost
+  zipkin-host: localhost                              
+    
+security:
+  oauth2:
+    client:
+      clientId: order-service
+      clientSecret: ORDER_SERVICE_PASSWORD
+      accessTokenUri: http://${app.oauth2-host}:5000/oauth/token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      userInfoUri: http://${app.oauth2-host}:5000/users/current
+
+
+spring:
+#  profiles.active: dev
+  jpa:
+    properties:
+      hibernate.format_sql: true
+    generate-ddl: true
+    open-in-view: false         
+    hibernate:                 
+      ddl-auto: create  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+
+        
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+ribbon.ServerListRefreshInterval: 5000
+ribbon.NFLoadBalancerPingInterval: 5
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings:
+    order-output:
+      destination: order-topic
+        
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+          
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+            
+feign.hystrix.enabled: true
+hystrix.metrics.enabled: true          
+
+spring.zipkin.base-url: http://${app.zipkin-host}:9411
+        
+---
+spring.profiles: docker
+
+spring.rabbitmq.host: rabbitmq
+
+app.eureka-server: service-discovery

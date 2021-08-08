@@ -1,0 +1,151 @@
+version: '2.1'
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: 'rabbitmq:management'
+    mem_limit: 350m
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "15672:15672"
+      - "5672:5672"      
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+      
+  config-server:
+    container_name: config-server  
+    environment:
+      - ENCRYPT_KEY=${CONFIG_SERVER_ENCRYPT_KEY}
+      - SPRING_SECURITY_USER_NAME=${CONFIG_SERVER_USR}
+      - SPRING_SECURITY_USER_PASSWORD=${CONFIG_SERVER_PWD}
+    volumes:
+      - ./config-repo:/config-repo
+    build: spring-cloud/config
+    restart: always    
+    mem_limit: 350m    
+    ports:
+      - "8888:8888"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8888/actuator/health 2>&1 | grep UP || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  service-discovery:
+    container_name: service-discovery   
+    image: service-discovery
+    build: ./spring-cloud/service-discovery
+    mem_limit: 350m
+    ports:
+      - 8761:8761
+    depends_on:
+      - config-server
+    
+  api-gateway:
+    container_name: gateway-server  
+    image: gateway-server
+    build: ./spring-cloud/gateway
+    mem_limit: 350m
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://service-discovery:8761/eureka
+    ports:
+      - 7000:7000
+    depends_on:
+      - config-server
+  auth-service:
+    container_name: auth-service  
+    image: auth-service
+    build: ./spring-cloud/auth-service
+    mem_limit: 350m
+    ports:
+      - 5000:5000
+    depends_on:
+      - config-server     
+  audit-service:
+    container_name: audit-service
+    build: ./microservices/audit-service
+    mem_limit: 350m
+    ports:
+      - "7003:7003"
+    depends_on:
+      - config-server
+    
+  inventory-service:
+    container_name: inventory-service
+    build: ./microservices/inventory-service1/inventory-server
+    mem_limit: 350m
+    ports:
+      - "7002:7002"
+    depends_on:
+      - config-server
+
+  catalog-service:
+    container_name: catalog-service
+    build: ./microservices/catalog-service
+    restart: always    
+    mem_limit: 350m
+    ports:
+      - "7001:7001"
+    depends_on:
+      - config-server
+  order-service:
+    container_name: order-service
+    build: ./microservices/order-service
+    restart: always    
+    mem_limit: 350m
+    ports:
+      - "7004:7004"
+    depends_on:
+      - config-server
+
+  payment-service:
+    container_name: payment-service
+    build: ./microservices/payment-service/payment-server
+    restart: always    
+    mem_limit: 350m
+    ports:
+      - "7005:7005"
+    depends_on:
+      - config-server
+
+  orchestrator-service:
+    container_name: orchestrator-service
+    build: ./microservices/orchestrator-service
+    restart: always    
+    mem_limit: 350m
+    ports:
+      - "7009:7009"
+    depends_on:
+      - config-server   
+      
+  monitoring:
+    container_name: monitoring 
+    build: ./spring-cloud/monitoring
+    restart: always
+    depends_on:
+      - config-server
+    ports:
+      - 9000:9000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+  zipkin:
+    container_name: zipkin  
+    image: openzipkin/zipkin:2.12.9
+    mem_limit: 512m
+    environment:
+      - STORAGE_TYPE=mem
+      - RABBIT_ADDRESSES=rabbitmq
+      - RABBIT_USER=guest
+      - RABBIT_PASSWORD=guest      
+    ports:
+      - 9411:9411
+    depends_on:
+      rabbitmq:
+        condition: service_healthy    

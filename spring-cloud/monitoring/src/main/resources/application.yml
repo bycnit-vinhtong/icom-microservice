@@ -1,0 +1,17 @@
+server.port: 8080
+spring.application.name: monitoring
+     
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+            
+---
+spring.profiles: docker
+
+spring.rabbitmq.host: rabbitmq
+
+app.eureka-server: service-discovery

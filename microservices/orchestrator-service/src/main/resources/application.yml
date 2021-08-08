@@ -1,0 +1,111 @@
+server.port: 7009
+spring.application.name: orchestrator-service
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+
+app:
+  message: hello orchestrator service
+  prod: false
+  defaultPageSize: 10
+  inventory-service:
+    host: http://localhost:7002/inventory
+  eureka-server: localhost
+  oauth2-host: localhost
+  zipkin-host: localhost 
+
+security:
+  oauth2:
+    client:
+      clientId: orchestrator-service
+      clientSecret: ORCHESTRATOR_SERVICE_PASSWORD
+      accessTokenUri: http://${app.oauth2-host}:5000/oauth/token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      userInfoUri: http://${app.oauth2-host}:5000/users/current
+spring.main.allow-bean-definition-overriding: true
+
+
+spring:
+#  profiles.active: dev
+  jpa:
+    properties:
+      hibernate.format_sql: true
+    generate-ddl: false
+    open-in-view: false         
+    hibernate:                 
+      ddl-auto: create  
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
+          
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+ribbon.ServerListRefreshInterval: 5000
+ribbon.NFLoadBalancerPingInterval: 5
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings.order-input:
+    destination: order-topic
+
+spring.cloud.stream.bindings.input.consumer:
+  maxAttempts: 3
+  backOffInitialInterval: 500
+  backOffMaxInterval: 1000
+  backOffMultiplier: 2.0
+
+spring.cloud.stream.rabbit.bindings.input.consumer:
+  autoBindDlq: true
+  republishToDlq: true
+
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+feign:
+  client:
+    url:
+      inventoryService: http://localhost:7002
+      paymentService: http://localhost:7005
+            
+feign.hystrix.enabled: true
+hystrix.metrics.enabled: true          
+
+spring.zipkin.base-url: http://${app.zipkin-host}:9411       
+
+---
+spring.profiles: docker
+
+spring.rabbitmq.host: rabbitmq
+
+app.eureka-server: service-discovery
+
+app.oauth2-host: auth-service
+  

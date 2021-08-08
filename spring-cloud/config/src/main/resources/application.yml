@@ -1,0 +1,30 @@
+server:
+  port: 8888
+spring.security.enable-csrf: false  
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/shared
+  profiles:
+     include: native
+  security:
+    user:
+      password: password
+
+
+
+# WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+#health.config.enabled: false
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+spring.cloud.config.server.bootstrap: true
+spring.profiles.active: dev
+logging:
+  level:
+    root: info
+
+---
+spring.profiles: docker
+spring.cloud.config.server.native.searchLocations: file:/config-repo

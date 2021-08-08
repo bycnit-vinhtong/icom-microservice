@@ -1,0 +1,49 @@
+app.message: hello world update 11
+
+app:
+  eureka-server: localhost
+  oauth2-host: localhost   
+  zipkin-host: localhost 
+  
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+ribbon.ServerListRefreshInterval: 5000
+ribbon.NFLoadBalancerPingInterval: 5
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+
+spring.zipkin.base-url: http://${app.zipkin-host}:9411          
+
+---
+spring.profiles: docker
+
+spring.rabbitmq.host: rabbitmq
+
+app.eureka-server: service-discovery
+
+app.oauth2-host: auth-service 
+
+app.zipkin-host: zipkin  
