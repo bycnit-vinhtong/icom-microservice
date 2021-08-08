@@ -1,0 +1,5 @@
+fqdn: "bycnit.site"
+clustername: "cilos"
+servicename: "spring-boot-hello-world"
+tlssecretname: "bycnit.site-tls-secret"
+issuer: "letsencrypt-prod"

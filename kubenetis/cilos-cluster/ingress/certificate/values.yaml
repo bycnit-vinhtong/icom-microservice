@@ -1,0 +1,3 @@
+fqdn: "bycnit.site"
+secretName: "bycnit.site-tls-secret"
+letsencryptName: "letsencrypt-prod"

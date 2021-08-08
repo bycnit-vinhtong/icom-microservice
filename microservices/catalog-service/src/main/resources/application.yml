@@ -1,98 +1,86 @@
 server.port: 7001
 spring.application.name: catalog-service
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
-
+management.endpoint.health.show-details: ALWAYS
+management.endpoints.web.exposure.include: '*'
 #logging:
+app:
+   message: Catalog service
+   prod: false
 #  level:
 #    org:
 #      hibernate:
 #        SQL: debug
-
-app:
-  message: hello catalog service
-  prod: false
-  defaultPageSize: 10
-  inventory-service:
-    host: http://localhost:7002/inventory
-  eureka-server: localhost
-  oauth2-host: localhost
-  zipkin-host: localhost    
-
-
+   defaultPageSize: 10
+   inventory-service:
+      host: http://localhost:7002/inventory
+   eureka-server: localhost
+   oauth2-host: localhost
+   zipkin-host: localhost
 security:
-  oauth2:
-    client:
-      clientId: catalog-service
-      clientSecret: CATALOG_SERVICE_PASSWORD
-      accessTokenUri: http://${app.oauth2-host}:5000/oauth/token
-      grant-type: client_credentials
-      scope: server
-    resource:
-      userInfoUri: http://${app.oauth2-host}:5000/users/current
+   oauth2:
+      client:
+         clientId: catalog-service
+         clientSecret: CATALOG_SERVICE_PASSWORD
+         accessTokenUri: http://${app.oauth2-host}:5000/oauth/token
+         grant-type: client_credentials
+         scope: server
+      resource:
+         userInfoUri: http://${app.oauth2-host}:5000/users/current
 spring.main.allow-bean-definition-overriding: true
 spring:
+   jpa:
+      properties:
+         hibernate.format_sql: true
+      generate-ddl: true
+      open-in-view: false
+      hibernate:
 #  profiles.active: dev
-  jpa:
-    properties:
-      hibernate.format_sql: true
-    generate-ddl: true
-    open-in-view: false         
-    hibernate:                 
-      ddl-auto: create  
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-          
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-ribbon.ServerListRefreshInterval: 5000
-ribbon.NFLoadBalancerPingInterval: 5
+         ddl-auto: create
+   h2:
+      console:
+         enabled: true
+         path: /h2-console
+# eureka:
+#    client:
+#       serviceUrl:
+#          defaultZone: http://${app.eureka-server}:8761/eureka/
+#       initialInstanceInfoReplicationIntervalSeconds: 5
+#       registryFetchIntervalSeconds: 5
+#    instance:
+#       leaseRenewalIntervalInSeconds: 5
+#       leaseExpirationDurationInSeconds: 5
+# ribbon.ServerListRefreshInterval: 5000
+# ribbon.NFLoadBalancerPingInterval: 5
+# spring.cloud.stream:
+#    defaultBinder: rabbit
+#    default.contentType: application/json
+#    bindings:
+#       output-audit:
+#          destination: audit-support
+#          producer:
+#             required-groups: auditGroup
 
-spring.cloud.stream:
-  defaultBinder: rabbit
-  default.contentType: application/json
-  bindings:
-    output-audit:
-      destination: audit-support
-      producer:
-        required-groups: auditGroup
+# spring.rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
 
-spring.rabbitmq:
-  host: localhost
-  port: 5672
-  username: guest
-  password: guest
-          
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
-            
-feign.hystrix.enabled: true
-hystrix.metrics.enabled: true          
-
-spring.zipkin.base-url: http://${app.zipkin-host}:9411
-
-
+# hystrix:
+#    command:
+#       default:
+#          execution:
+#             isolation:
+#                thread:
+#                   timeoutInMilliseconds: 10000
+#feign.hystrix.enabled: true
 ---
 spring.profiles: docker
-
 spring.rabbitmq.host: rabbitmq
-
 app.eureka-server: service-discovery
-
 app.oauth2-host: auth-service
+# ----------------
+# Orphan comments:
+# ----------------
+# Was at begin of line:86 :#hystrix.metrics.enabled: true
+# Was at begin of line:88 :#spring.zipkin.base-url: http://${app.zipkin-host}:9411

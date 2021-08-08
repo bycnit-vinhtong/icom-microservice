@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  mobsf:
+    image: rahulwagh17/kubernetes:jhooq-k8s-springboot
+    ports:
+      - 8088:8080

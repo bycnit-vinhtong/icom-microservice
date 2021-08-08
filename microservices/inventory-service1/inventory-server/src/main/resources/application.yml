@@ -1,4 +1,4 @@
-server.port: 7002
+#server.port: 7002
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -8,19 +8,19 @@ app:
   message: hello inventory service
   prod: false
   defaultPageSize: 10
-  eureka-server: localhost
-  oauth2-host: localhost
+  #eureka-server: localhost
+  oauth2-host: bycnit.site/oauth
     
 security:
   oauth2:
     client:
       clientId: inventory-service
       clientSecret: INVENTORY_SERVICE_PASSWORD
-      accessTokenUri: http://${app.oauth2-host}:5000/oauth/token
+      accessTokenUri: https://${app.oauth2-host}/oauth/token
       grant-type: client_credentials
       scope: server
     resource:
-      userInfoUri: http://${app.oauth2-host}:5000/users/current
+      userInfoUri: https://${app.oauth2-host}/users/current
 
 
 spring:
@@ -44,23 +44,23 @@ spring:
 #        SQL: debug
 
         
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-ribbon.ServerListRefreshInterval: 5000
-
-ribbon.NFLoadBalancerPingInterval: 5
+# eureka:
+#   client:
+#     serviceUrl:
+#       defaultZone: http://${app.eureka-server}:8761/eureka/
+#     initialInstanceInfoReplicationIntervalSeconds: 5
+#     registryFetchIntervalSeconds: 5
+#   instance:
+#     leaseRenewalIntervalInSeconds: 5
+#     leaseExpirationDurationInSeconds: 5
+# 
+# ribbon.ServerListRefreshInterval: 5000
+# 
+# ribbon.NFLoadBalancerPingInterval: 5
 
 ---
-spring.profiles: docker
-
-spring.rabbitmq.host: rabbitmq
-
-app.eureka-server: service-discovery
+# spring.profiles: docker
+# 
+# spring.rabbitmq.host: rabbitmq
+# 
+# app.eureka-server: service-discovery
