@@ -13,5 +13,8 @@ docker build -t 1983vi/icom-auth-server:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-auth-server:v1.0.0
 
 
+helm upgrade bycnit.site-ingress ./ingress/ingress
 
 helm install --name auth-server ./
+
+helm install --name inventory-service ./icom/inventory-service

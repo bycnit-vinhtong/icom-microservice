@@ -1,0 +1,162 @@
+{
+	"variables": [],
+	"info": {
+		"name": "test-ms",
+		"_postman_id": "f67c9b90-f686-1c89-cccd-578b306ae8f3",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth-server",
+			"description": "",
+			"item": [
+				{
+					"name": "http://localhost:8080/oauth/token",
+					"request": {
+						"url": "http://localhost:8080/oauth/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic YnJvd3Nlcjpicm93c2VyX3Bhc3N3b3Jk",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "https://bycnit.site/oauth/token",
+					"request": {
+						"url": "https://bycnit.site/oauth/oauth/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic YnJvd3Nlcjpicm93c2VyX3Bhc3N3b3Jk",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "https://bycnit.site/oauth/users/current",
+					"request": {
+						"url": "https://bycnit.site/oauth/users/current",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer d4099fe7-ca6b-42fa-afdf-122fea224fe3",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "inventory",
+			"description": "",
+			"item": [
+				{
+					"name": "localhost:8080/1",
+					"request": {
+						"url": "localhost:8080/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 71edb006-3a4c-4590-951a-3213ec2d21d9",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "https://bycnit.site/inventory-service/",
+					"request": {
+						"url": "https://bycnit.site/inventory-service/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer d4099fe7-ca6b-42fa-afdf-122fea224fe3",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

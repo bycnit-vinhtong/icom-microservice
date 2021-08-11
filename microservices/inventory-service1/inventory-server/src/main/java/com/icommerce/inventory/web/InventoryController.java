@@ -23,7 +23,6 @@ import com.icommerce.inventory.service.InventoryItemService;
 
 
 @RestController
-@RequestMapping(WebConstants.View.INVENTORY)
 @RefreshScope
 public class InventoryController {
 	
