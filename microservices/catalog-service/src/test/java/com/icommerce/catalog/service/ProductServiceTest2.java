@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
+//import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 

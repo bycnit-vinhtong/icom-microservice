@@ -1,0 +1,12 @@
+https://git.app.uib.no/caleno/helm-charts/tree/79aa425075232d7024e43ad8f88f3776c68093f5/stable/rabbitmq
+username = user
+password = QjN5ZWdSZDRhTg==[
+helm install  stable/rabbitmq  --name  rabbitmq-server --set rabbitmq.username=guest,rabbitmq.password=bycnit#123  --namespace kube-public 
+watch kubectl get deployments,pods,services --namespace kube-public
+kubectl get secret --namespace kube-public rabbitmq-server -o jsonpath="{.data.rabbitmq-password}"
+
+
+
+helm upgrade rabbitmq-server stable/rabbitmq --set rabbitmq.username=guest,rabbitmq.password=bycnit#123
+
+helm del --purge rabbitmq-server 

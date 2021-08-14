@@ -1,4 +1,4 @@
-server.port: 7001
+server.port: 8080
 spring.application.name: catalog-service
 management.endpoint.health.show-details: ALWAYS
 management.endpoints.web.exposure.include: '*'
@@ -11,21 +11,21 @@ app:
 #      hibernate:
 #        SQL: debug
    defaultPageSize: 10
+   ms-host: bycnit.site
    inventory-service:
-      host: http://localhost:7002/inventory
+      host: https://${app.ms-host}/inventory-service
    eureka-server: localhost
-   oauth2-host: localhost
    zipkin-host: localhost
 security:
    oauth2:
       client:
          clientId: catalog-service
          clientSecret: CATALOG_SERVICE_PASSWORD
-         accessTokenUri: http://${app.oauth2-host}:5000/oauth/token
+         accessTokenUri: https://${app.ms-host}/oauth/oauth/token
          grant-type: client_credentials
          scope: server
       resource:
-         userInfoUri: http://${app.oauth2-host}:5000/users/current
+         userInfoUri: https://${app.ms-host}/oauth/users/current
 spring.main.allow-bean-definition-overriding: true
 spring:
    jpa:
@@ -66,19 +66,19 @@ spring:
 #    username: guest
 #    password: guest
 
-# hystrix:
-#    command:
-#       default:
-#          execution:
-#             isolation:
-#                thread:
-#                   timeoutInMilliseconds: 10000
-#feign.hystrix.enabled: true
+hystrix:
+   command:
+      default:
+         execution:
+            isolation:
+               thread:
+                  timeoutInMilliseconds: 10000
+eign.hystrix.enabled: true
 ---
-spring.profiles: docker
-spring.rabbitmq.host: rabbitmq
-app.eureka-server: service-discovery
-app.oauth2-host: auth-service
+#spring.profiles: docker
+#spring.rabbitmq.host: rabbitmq
+#app.eureka-server: service-discovery
+#app.oauth2-host: auth-service
 # ----------------
 # Orphan comments:
 # ----------------

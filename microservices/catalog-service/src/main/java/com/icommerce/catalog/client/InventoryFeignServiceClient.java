@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.icommerce.inventory.client.InventoryItemDto;
 
-@FeignClient(name = "inventory-service", fallback = InventoryServiceClientFallback.class)
+/*@FeignClient(name = "inventory-service", fallback = InventoryServiceClientFallback.class)
 public interface InventoryFeignServiceClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/inventory/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	InventoryItemDto getInventory(@PathVariable("id") final Long productId);
 
-}
+}*/

@@ -29,5 +29,9 @@ spec:
             backend:
               serviceName: inventory-service
               servicePort: 80
+          - path: /rabbit/(.*)
+            backend:
+              serviceName: rabbitmq-server
+              servicePort: 15672              
 
 
