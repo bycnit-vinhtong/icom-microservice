@@ -4,7 +4,7 @@ Contract.make {
   description "should return Inventory by id=1"
 
   request {
-    url "/inventory/1"
+    url "/1"
     method GET()
   }
 

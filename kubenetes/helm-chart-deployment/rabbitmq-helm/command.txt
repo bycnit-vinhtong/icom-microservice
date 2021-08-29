@@ -1,12 +1,38 @@
-https://git.app.uib.no/caleno/helm-charts/tree/79aa425075232d7024e43ad8f88f3776c68093f5/stable/rabbitmq
-username = user
-password = QjN5ZWdSZDRhTg==[
-helm install  stable/rabbitmq  --name  rabbitmq-server --set rabbitmq.username=guest,rabbitmq.password=bycnit#123  --namespace kube-public 
+
+helm install rabbitmq-server  bitnami-azure/rabbitmq --set auth.username="admin" --set auth.password="bycnit#123" --set auth.erlangCookie=secretcookie  --namespace kube-public 
 watch kubectl get deployments,pods,services --namespace kube-public
-kubectl get secret --namespace kube-public rabbitmq-server -o jsonpath="{.data.rabbitmq-password}"
+
+helm upgrade rabbitmq-server bitnami-azure/rabbitmq  --namespace kube-public  --set auth.username="admin" --set auth.password="bycnit#123" --set auth.erlangCookie=secretcookie  --set auth.erlangCookie=secretcookie 
 
 
+#problem can not start
+helm delete rabbitmq-server
+kubectl delete pvc data-rabbitmq-server-0
 
-helm upgrade rabbitmq-server stable/rabbitmq --set rabbitmq.username=guest,rabbitmq.password=bycnit#123
+#check log
+kubectl logs pods/rabbitmq-server-0  -n kube-public
+ 
 
-helm del --purge rabbitmq-server 
+kubectl describe pod rabbitmq-server-0  -n kube-public
+
+kubectl delete statefulsets  rabbitmq-server -n kube-public
+
+
+kubectl edit pvc data-rabbitmq-server-0 -n kube-public
+kubectl patch pvc data-rabbitmq-server-0 -p '{"spec":{"persistentVolumeReclaimPolicy":"Delete"}}' -n kube-public
+
+
+Edit Servervice of rabbitmq-server on Azure
+
+  selector:
+    app.kubernetes.io/instance: rabbitmq-server
+    app.kubernetes.io/name: rabbitmq
+  clusterIP: 10.0.87.234
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Local
+  healthCheckNodePort: 32512
+status:
+  loadBalancer:
+    ingress:
+      - ip: 13.69.56.119

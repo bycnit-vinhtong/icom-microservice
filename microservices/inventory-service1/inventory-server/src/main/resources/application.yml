@@ -37,6 +37,9 @@ spring:
       enabled: false
       path: /h2-console
 
+spring.zipkin.baseUrl: http://zipkin-server:9411
+logging.file.name : ./log/inventory-service.log
+
 #logging:
 #  level:
 #    org:

@@ -1,0 +1,16 @@
+
+
+	  
+  selector:
+    app.kubernetes.io/instance: zipkin-server
+    app.kubernetes.io/name: zipkin-server
+  clusterIP: 10.0.149.65
+  type: LoadBalancer
+  #type: NodePort
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+status:
+  #loadBalancer: {}
+  #loadBalancer:
+    #ingress:
+      #- ip: 40.68.201.25

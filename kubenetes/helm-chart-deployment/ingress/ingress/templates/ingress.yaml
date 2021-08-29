@@ -29,6 +29,18 @@ spec:
             backend:
               serviceName: inventory-service
               servicePort: 80
+          - path: /audit-service/(.*)
+            backend:
+              serviceName: audit-service
+              servicePort: 80 
+          - path: /catalog-service/(.*)
+            backend:
+              serviceName: catalog-service
+              servicePort: 80 
+          - path: /zipkin-server
+            backend:
+              serviceName: zipkin-server
+              servicePort: 9411                
           - path: /rabbit/(.*)
             backend:
               serviceName: rabbitmq-server

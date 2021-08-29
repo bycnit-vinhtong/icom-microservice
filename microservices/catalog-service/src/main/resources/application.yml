@@ -14,8 +14,8 @@ app:
    ms-host: bycnit.site
    inventory-service:
       host: https://${app.ms-host}/inventory-service
-   eureka-server: localhost
-   zipkin-host: localhost
+   #eureka-server: localhost
+   #zipkin-host: 40.68.201.25
 security:
    oauth2:
       client:
@@ -51,20 +51,27 @@ spring:
 #       leaseExpirationDurationInSeconds: 5
 # ribbon.ServerListRefreshInterval: 5000
 # ribbon.NFLoadBalancerPingInterval: 5
-# spring.cloud.stream:
-#    defaultBinder: rabbit
-#    default.contentType: application/json
-#    bindings:
-#       output-audit:
-#          destination: audit-support
-#          producer:
-#             required-groups: auditGroup
+spring.cloud.stream:
+   defaultBinder: rabbit
+   default.contentType: application/json
+   bindings:
+      output-audit:
+         destination: audit-support
+         producer:
+            required-groups: auditGroup
 
 # spring.rabbitmq:
-#    host: localhost
+#    host: 13.69.56.119
 #    port: 5672
-#    username: guest
-#    password: guest
+#    username: admin
+#    password: bycnit#123
+spring.rabbitmq:
+   host: 13.69.56.119
+   port: 5672
+   username: admin
+   password: bycnit#123
+
+spring.zipkin.baseUrl: http://zipkin-server:9411
 
 hystrix:
    command:
@@ -74,6 +81,10 @@ hystrix:
                thread:
                   timeoutInMilliseconds: 10000
 eign.hystrix.enabled: true
+
+logging.level.org.springframework.web.servlet.DispatcherServlet: TRACE
+logging.file.name : ./log/catalog-service.log
+
 ---
 #spring.profiles: docker
 #spring.rabbitmq.host: rabbitmq

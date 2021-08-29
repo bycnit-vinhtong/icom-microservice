@@ -14,7 +14,7 @@ import com.icommerce.audit.dto.AuditLogDto;
 import com.icommerce.audit.dto.Event;
 import com.icommerce.audit.dto.SearchCriteria;
 
-@EnableBinding(Sink.class)
+@EnableBinding(ProductAuditChanelSink.class)
 public class MessageAuditProcessor {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MessageAuditProcessor.class);
@@ -22,7 +22,7 @@ public class MessageAuditProcessor {
 	@Autowired
 	AuditLogService auditLogService;
 
-	@StreamListener(target = Sink.INPUT)
+	@StreamListener(target = ProductAuditChanelSink.INPUT)
 	public void process(Event<Integer, SearchCriteria> event) {
 		if (event != null && event.getEventType() != null) {
 			LOG.info("Process message created at {}...", event.getEventCreatedAt());

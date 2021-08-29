@@ -1,5 +1,7 @@
-server.port: 7003
+#server.port: 7003
 spring.application.name: audit-service
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
 spring:
 #  profiles.active: dev
   jpa:
@@ -41,9 +43,10 @@ ribbon.NFLoadBalancerPingInterval: 5
 spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json
-  bindings.input:
-    destination: audit-support
-    group: auditGroup
+  bindings:
+    input-product:
+      destination: audit-support
+      group: auditGroup
 
 spring.cloud.stream.bindings.input.consumer:
   maxAttempts: 3
@@ -56,16 +59,18 @@ spring.cloud.stream.rabbit.bindings.input.consumer:
   republishToDlq: true
 
 spring.rabbitmq:
-  host: localhost
-  port: 5672
-  username: guest
-  password: guest
+   host: 13.69.56.119
+   port: 5672
+   username: admin
+   password: bycnit#123
         
+spring.zipkin.baseUrl: http://zipkin-server:9411
+logging.file.name : ./log/audit-service.log
 
 ---
-spring.profiles: docker
-
-spring.rabbitmq.host: rabbitmq
-
-app.eureka-server: service-discovery
+# spring.profiles: docker
+# 
+# spring.rabbitmq.host: rabbitmq
+# 
+# app.eureka-server: service-discovery
   

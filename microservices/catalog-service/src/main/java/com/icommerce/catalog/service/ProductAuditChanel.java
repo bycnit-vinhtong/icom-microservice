@@ -1,6 +1,6 @@
 package com.icommerce.catalog.service;
 
-/*import org.springframework.cloud.stream.annotation.Output;
+import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
 
 public interface ProductAuditChanel {
@@ -10,5 +10,5 @@ public interface ProductAuditChanel {
 	@Output(OUTPUT_AUDIT)
 	MessageChannel outputAudit();
 
-}*/
+}
 

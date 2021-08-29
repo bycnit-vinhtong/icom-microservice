@@ -20,7 +20,8 @@ import com.icommerce.inventory.client.InventoryItemDto;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=RANDOM_PORT,  properties = {"eureka.client.enabled=false"},classes = {CatalogServiceTestsApp.class})
+@SpringBootTest(webEnvironment=RANDOM_PORT,  classes = {CatalogServiceTestsApp.class},
+properties = { "stubrunner.cloud.loadbalancer.enabled=false"})
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
 @AutoConfigureStubRunner(stubsMode = StubRunnerProperties.StubsMode.LOCAL,

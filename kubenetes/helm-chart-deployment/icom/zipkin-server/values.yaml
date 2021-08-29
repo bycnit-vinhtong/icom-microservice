@@ -1,0 +1,15 @@
+replicaCount: 1
+image:
+  repository: "openzipkin/zipkin"
+  pullPolicy: Always
+service:
+  type: NodePort
+  port: 9411
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+resources: {}

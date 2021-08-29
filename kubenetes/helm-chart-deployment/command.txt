@@ -8,13 +8,36 @@ helm del --purge [deployment name]
 
 #Docker
 
+kubectl get pods -n kube-public
+
 mvn clean install -Dmaven.test.skip=true
 docker build -t 1983vi/icom-auth-server:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-auth-server:v1.0.0
 
-
 helm upgrade bycnit.site-ingress ./ingress/ingress
 
-helm install --name auth-server ./
 
-helm install --name inventory-service ./icom/inventory-service
+docker build -t 1983vi/icom-inventory-service:v1.0.0 -f ./Dockerfile .
+docker push 1983vi/icom-inventory-service:v1.0.0
+kubectl exec -it  catalog-service-bc85f975c-czjns -n kube-public -- /bin/bash
+helm del inventory-service
+helm install inventory-service ./icom/inventory-service
+helm upgrade inventory-service ./icom/inventory-service
+
+
+docker build -t 1983vi/icom-catalog-service:v1.0.0 -f ./Dockerfile .
+docker push 1983vi/icom-catalog-service:v1.0.0
+helm del catalog-service
+helm install catalog-service ./icom/catalog-service
+helm upgrade catalog-service ./icom/catalog-service
+
+
+docker build -t 1983vi/icom-audit-service:v1.0.0 -f ./Dockerfile .
+docker push 1983vi/icom-audit-service:v1.0.0
+helm del audit-service
+helm install  audit-service ./icom/audit-service
+
+
+kubectl port-forward zipkin-server-65477d9598-9kwrj 9411 -n kube-public
+
+
