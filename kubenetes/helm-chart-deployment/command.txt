@@ -19,7 +19,7 @@ helm upgrade bycnit.site-ingress ./ingress/ingress
 
 docker build -t 1983vi/icom-inventory-service:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-inventory-service:v1.0.0
-kubectl exec -it  catalog-service-bc85f975c-czjns -n kube-public -- /bin/bash
+kubectl exec -it  catalog-service-bc85f975c-dq8vf -n kube-public -- /bin/bash
 helm del inventory-service
 helm install inventory-service ./icom/inventory-service
 helm upgrade inventory-service ./icom/inventory-service
