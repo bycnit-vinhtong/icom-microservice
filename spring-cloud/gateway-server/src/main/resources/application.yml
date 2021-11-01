@@ -1,0 +1,45 @@
+spring.application.name: gateway-server
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+app:
+   prod: false
+   defaultPageSize: 10
+   ms-host: bycnit.site
+   inventory-service:
+      host: https://${app.ms-host}/inventory-service
+# spring:
+#   security:
+#     oauth2:
+#       client:
+#         registration:
+#           uaa:
+#             client-id: catalog-service
+#             client-secret: CATALOG_SERVICE_PASSWORD
+#             authorization-grant-type: client_credentials
+#         provider:
+#           uaa:
+#             token-uri: https://${app.ms-host}/oauth/token
+spring.zipkin.baseUrl: http://40.68.201.25:9411
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: catalog_service
+        uri: http://catalog-service:80
+        predicates:
+        - Path=/catalog-service/**
+        filters:
+        - RewritePath=/catalog-service(?<segment>/?.*), $\{segment}
+      - id: inventory-service
+        uri: http://inventory-service:80
+        predicates:
+        - Path=/inventory-service/**
+        filters:
+        - RewritePath=/inventory-service(?<segment>/?.*), $\{segment}
+      - id: auth-service
+        uri: http://auth-server:80
+        predicates:
+        - Path=/auth/**
+        filters:
+        - RewritePath=/auth(?<segment>/?.*), $\{segment}        
+        

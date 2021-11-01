@@ -19,7 +19,7 @@ helm upgrade bycnit.site-ingress ./ingress/ingress
 
 docker build -t 1983vi/icom-inventory-service:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-inventory-service:v1.0.0
-kubectl exec -it  catalog-service-bc85f975c-dq8vf -n kube-public -- /bin/bash
+kubectl exec -it  catalog-service-bc85f975c-5qkg6 -n kube-public -- /bin/bash
 helm del inventory-service
 helm install inventory-service ./icom/inventory-service
 helm upgrade inventory-service ./icom/inventory-service
@@ -38,6 +38,13 @@ helm del audit-service
 helm install  audit-service ./icom/audit-service
 
 
+docker build -t 1983vi/icom-gateway-server:v1.0.0 -f ./Dockerfile .
+docker push 1983vi/icom-gateway-server:v1.0.0
+helm del gateway-server
+helm install  gateway-server ./icom/gateway-server
+
+
 kubectl port-forward zipkin-server-65477d9598-9kwrj 9411 -n kube-public
 
 
+http://40.68.201.25:9411/zipkin/

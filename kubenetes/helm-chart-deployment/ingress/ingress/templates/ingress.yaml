@@ -17,26 +17,31 @@ spec:
     - host: {{.Values.fqdn}}
       http:
         paths:
-          - path: /
+          #- path: /
+            #backend:
+              #serviceName: {{.Values.servicename}}
+              #servicePort: 80
+          - path: /api/(.*)
             backend:
-              serviceName: {{.Values.servicename}}
-              servicePort: 80
-          - path: /oauth/(.*)
-            backend:
-              serviceName: auth-server
-              servicePort: 80
-          - path: /inventory-service/(.*)
-            backend:
-              serviceName: inventory-service
-              servicePort: 80
-          - path: /audit-service/(.*)
-            backend:
-              serviceName: audit-service
-              servicePort: 80 
-          - path: /catalog-service/(.*)
-            backend:
-              serviceName: catalog-service
-              servicePort: 80 
+              serviceName: gateway-server
+              servicePort: 80                
+          # - path: /oauth/(.*)
+            # backend:
+              # serviceName: auth-server
+              # servicePort: 80
+          # - path: /inventory-service/(.*)
+            # backend:
+              # serviceName: inventory-service
+              # servicePort: 80
+          # - path: /audit-service/(.*)
+            # backend:
+              # serviceName: audit-service
+              # servicePort: 80 
+          # - path: /catalog-service/(.*)
+            # backend:
+              # serviceName: catalog-service
+              # servicePort: 80 
+             
           - path: /zipkin-server
             backend:
               serviceName: zipkin-server
