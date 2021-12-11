@@ -13,7 +13,7 @@ app:
    defaultPageSize: 10
    ms-host: bycnit.site
    inventory-service:
-      host: https://${app.ms-host}/inventory-service
+      host: http://inventory-service
    #eureka-server: localhost
    #zipkin-host: 40.68.201.25
 security:
@@ -21,11 +21,11 @@ security:
       client:
          clientId: catalog-service
          clientSecret: CATALOG_SERVICE_PASSWORD
-         accessTokenUri: https://${app.ms-host}/oauth/oauth/token
+         accessTokenUri: https://${app.ms-host}/api/auth/oauth/token
          grant-type: client_credentials
          scope: server
       resource:
-         userInfoUri: https://${app.ms-host}/oauth/users/current
+         userInfoUri: https://${app.ms-host}/api/auth/users/current
 spring.main.allow-bean-definition-overriding: true
 spring:
    jpa:

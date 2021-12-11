@@ -36,7 +36,7 @@ docker build -t 1983vi/icom-audit-service:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-audit-service:v1.0.0
 helm del audit-service
 helm install  audit-service ./icom/audit-service
-
+helm upgrade audit-service ./icom/audit-service
 
 docker build -t 1983vi/icom-gateway-server:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-gateway-server:v1.0.0

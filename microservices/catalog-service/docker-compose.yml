@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  test-ms:
+    container_name: test-ms
+    # build:
+       # context: .
+       # args:                                                                     
+         # - jar_file=./target/bcnithello.jar
+    image: 1983vi/icom-catalog-service:v1.0.0
+    pull_policy: always
+    environment:
+       test_evn: this is test evn from container
+    ports:
+      - 8082:8080
