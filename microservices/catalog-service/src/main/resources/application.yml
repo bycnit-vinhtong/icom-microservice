@@ -21,11 +21,11 @@ security:
       client:
          clientId: catalog-service
          clientSecret: CATALOG_SERVICE_PASSWORD
-         accessTokenUri: https://${app.ms-host}/api/auth/oauth/token
+         accessTokenUri: http://auth-service/oauth/token
          grant-type: client_credentials
          scope: server
       resource:
-         userInfoUri: https://${app.ms-host}/api/auth/users/current
+         userInfoUri: http://auth-service/users/current
 spring.main.allow-bean-definition-overriding: true
 spring:
    jpa:

@@ -142,6 +142,14 @@ public class ProductServiceImpl implements ProductService {
 		productAuditChanel.outputAudit().send(MessageBuilder.withPayload(new Event(event, productId, criteria)).build());
 	}
 
+    @Override
+    public void testCrash() {
+        Integer x = 0;
+        Integer y = 0;
+        Integer z;
+        z = x/y;
+    }
+
 	
 
 }

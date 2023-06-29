@@ -16,6 +16,9 @@ docker push 1983vi/icom-auth-server:v1.0.0
 
 helm upgrade bycnit.site-ingress ./ingress/ingress
 
+helm del auth-server
+helm upgrade  auth-server ./icom/auth-server
+helm install  auth-server ./icom/auth-server
 
 docker build -t 1983vi/icom-inventory-service:v1.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-inventory-service:v1.0.0
@@ -48,3 +51,7 @@ kubectl port-forward zipkin-server-65477d9598-9kwrj 9411 -n kube-public
 
 
 http://40.68.201.25:9411/zipkin/
+
+
+helm install  bycnitsite.westeurope.cloudapp.azure.com-tls-secret ingress/certificate
+helm install  bycnitsite.westeurope.cloudapp.azure.com-ingress ingress/ingress

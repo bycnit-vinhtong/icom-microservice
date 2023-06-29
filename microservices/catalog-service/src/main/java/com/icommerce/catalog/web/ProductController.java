@@ -21,7 +21,7 @@ import com.icommerce.catalog.service.ProductInventoryService;
 import com.icommerce.catalog.service.ProductService;
 import com.icommerce.catalog.web.validator.ParametValidator;
 import com.icommerce.inventory.client.InventoryItemDto;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping(WebConstants.View.PRODUCT)
@@ -66,6 +66,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ProductDto get(@PathVariable("id") final Long id) {
 		LOG.info("Get product...{} ", id);
 		return service.getProduct(id);
@@ -78,6 +79,7 @@ public class ProductController {
 	
 	
 	@GetMapping("/test-inventory")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
     public int getInvetoryByRestTeample() {
 		return productInventoryService.getInventoryUsingRestTemplate(1L);
     }
@@ -87,5 +89,11 @@ public class ProductController {
 		return productInventoryService.getInventoryUsingSharedClientPackage(1L);
     }
 	
+	
+	@GetMapping("/crash")
+    public void testCrash() {
+	    service.testCrash();
+    }
+    
 	
 }

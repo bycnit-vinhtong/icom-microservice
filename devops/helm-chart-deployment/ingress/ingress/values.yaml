@@ -1,5 +1,5 @@
-fqdn: "bycnit.site"
+fqdn: "bycnitsite.westeurope.cloudapp.azure.com"
 clustername: "cilos"
-servicename: "spring-boot-hello-world"
-tlssecretname: "bycnit.site-tls-secret"
+servicename: ""
+tlssecretname: "bycnitsite.westeurope.cloudapp.azure.com.site-tls-secret"
 issuer: "letsencrypt-prod"

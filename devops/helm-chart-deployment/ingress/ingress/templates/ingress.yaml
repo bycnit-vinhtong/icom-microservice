@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{.Release.Name}}
@@ -6,29 +6,47 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: {{.Values.issuer}}
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   tls:
     - hosts:
         - {{.Values.fqdn}}
       secretName: {{.Values.tlssecretname}}
+  ingressClassName: nginx    
   rules:
     - host: {{.Values.fqdn}}
       http:
         paths:
-          #- path: /
-            #backend:
-              #serviceName: {{.Values.servicename}}
-              #servicePort: 80
-          - path: /api/(.*)
+          - path: /test(/|$)(.*)
+            pathType: Prefix
             backend:
-              serviceName: gateway-server
-              servicePort: 80                
-          # - path: /oauth/(.*)
-            # backend:
-              # serviceName: auth-server
-              # servicePort: 80
+              service:
+                name: spring-boot-hello-world
+                port:
+                  number: 80
+          - path: /api(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway-server
+                port: 
+                  number: 80                
+          - path: /oauth(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-server
+                port:
+                  number: 80
+          - path: /catalog-service(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-service
+                port:
+                  number: 80                  
           # - path: /inventory-service/(.*)
             # backend:
               # serviceName: inventory-service
@@ -42,13 +60,19 @@ spec:
               # serviceName: catalog-service
               # servicePort: 80 
              
-          - path: /zipkin-server
+          - path: /zipkin-server(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
-              serviceName: zipkin-server
-              servicePort: 9411                
-          - path: /rabbit/(.*)
+              service:
+                name: zipkin-server
+                port: 
+                  number: 9411                
+          - path: /rabbit(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
-              serviceName: rabbitmq-server
-              servicePort: 15672              
+              service:
+                name: rabbitmq-server
+                port: 
+                  number: 15672              
 
 

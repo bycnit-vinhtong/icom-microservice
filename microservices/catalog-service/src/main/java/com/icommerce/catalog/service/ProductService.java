@@ -41,4 +41,7 @@ public interface ProductService {
 	 */
 	PageDto<ProductDto> findProductsByCriterias(SearchCriteria searchCriteria);
 	
+	
+	void testCrash();
+	
 }
