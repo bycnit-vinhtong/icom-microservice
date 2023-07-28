@@ -9,18 +9,18 @@ app:
   prod: false
   defaultPageSize: 10
   #eureka-server: localhost
-  oauth2-host: bycnit.site/oauth
+  oauth2-host: http://auth-server
     
 security:
   oauth2:
     client:
       clientId: inventory-service
       clientSecret: INVENTORY_SERVICE_PASSWORD
-      accessTokenUri: https://${app.oauth2-host}/oauth/token
+      accessTokenUri: ${app.oauth2-host}/oauth/token
       grant-type: client_credentials
       scope: server
     resource:
-      userInfoUri: https://${app.oauth2-host}/users/current
+      userInfoUri: ${app.oauth2-host}/users/current
 
 
 spring:
