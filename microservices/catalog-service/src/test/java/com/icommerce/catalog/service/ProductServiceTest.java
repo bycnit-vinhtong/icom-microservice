@@ -50,7 +50,7 @@ public class ProductServiceTest {
 	@DisplayName("Test get an existing product")
 	void testGetProductFound() {
 		Long productId = 1L;
-		Mockito.doReturn(0).when(productInventoryService).getInventory(1L);
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(1L);
 		ProductDto result = productService.getProduct(productId);
 		Assertions.assertNotNull(result, "The product must existing");
 		assertEquals("1", String.valueOf(result.getId()), "The product must equal 1");
@@ -73,7 +73,7 @@ public class ProductServiceTest {
 	@Test
 	@DisplayName("Test found product by name")
 	void testFoundProductByName() {
-		Mockito.doReturn(0).when(productInventoryService).getInventory(anyLong());
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(anyLong());
 		SearchCriteria searchCriteria = new SearchCriteria("bracket");
 		Map<String, Object> filters = new HashMap<>();
 		searchCriteria.setFilters(filters);
@@ -85,7 +85,7 @@ public class ProductServiceTest {
 	@Test
 	@DisplayName("Test notfound product by name")
 	void testNotFoundProductByName() {
-		Mockito.doReturn(0).when(productInventoryService).getInventory(anyLong());
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(anyLong());
 		SearchCriteria searchCriteria = new SearchCriteria("abasdf asdf");
 		Map<String, Object> filters = new HashMap<>();
 		searchCriteria.setFilters(filters);
@@ -97,7 +97,7 @@ public class ProductServiceTest {
 	@Test
 	@DisplayName("Test found product filter by brand and category")
 	void testFoundProductByNameAndFilterByBrandAndCategory() {
-		Mockito.doReturn(0).when(productInventoryService).getInventory(anyLong());
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(anyLong());
 		SearchCriteria searchCriteria = new SearchCriteria("");
 		Map<String, Object> filters = new HashMap<>();
 		filters.put("brand", 1);
@@ -114,13 +114,13 @@ public class ProductServiceTest {
 	@Test
 	@DisplayName("Test found product by name and filter by brand and category")
 	void testFoundProductByNameAndFilterByPrice() {
-		Mockito.doReturn(0).when(productInventoryService).getInventory(anyLong());
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(anyLong());
 	}
 	
 	@Test
 	@DisplayName("Test found product by name and filter by all properties")
 	void testFoundProductByNameAndFilterByAllProperties() {
-		Mockito.doReturn(0).when(productInventoryService).getInventory(anyLong());
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(anyLong());
 	}
 
 }

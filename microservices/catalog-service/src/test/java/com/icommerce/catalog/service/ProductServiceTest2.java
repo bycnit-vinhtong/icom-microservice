@@ -32,7 +32,7 @@ public class ProductServiceTest2 {
 	@DisplayName("Test get an existing product")
 	public void testGetProductFound() {
 		Long productId = 1L;
-		Mockito.doReturn(0).when(productInventoryService).getInventory(1L);
+		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(1L);
 		ProductDto result = productService.getProduct(productId);
 		Assertions.assertNotNull(result, "The product must existing");
 		assertEquals("1", String.valueOf(result.getId()), "The product must equal 1");
