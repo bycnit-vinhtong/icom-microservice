@@ -39,6 +39,6 @@ public class GlobalSecurityConfiguration {
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        return http.build();
+        return http.build(); 
     }
 }
