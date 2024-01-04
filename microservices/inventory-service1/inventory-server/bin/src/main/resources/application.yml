@@ -5,35 +5,37 @@ management.endpoints.web.exposure.include: "*"
 spring.application.name: inventory-service
 
 app:
-  message: Hello 
+  message: hello inventory service
   prod: false
   defaultPageSize: 10
   #eureka-server: localhost
   oauth2-host: http://auth-server
     
+security:
+  oauth2:
+    client:
+      clientId: inventory-service
+      clientSecret: INVENTORY_SERVICE_PASSWORD
+      accessTokenUri: ${app.oauth2-host}/oauth/token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      userInfoUri: ${app.oauth2-host}/users/current
+
 
 spring:
 #  profiles.active: dev
-  datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
   jpa:
     properties:
       hibernate.format_sql: true
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
+    generate-ddl: true
+    open-in-view: false         
+    hibernate:                 
+      ddl-auto: create  
   h2:
     console:
       enabled: false
       path: /h2-console
-
-spring.security.oauth2.resourceserver.jwt.issuer-uri: http://localhost:8000/auth/realms/spmia-realm
-spring.security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-
-token.converter.principal-attribute: preferred_username
-token.converter.resource-id: ostock
 
 spring.zipkin.baseUrl: http://40.68.201.25:9411
 logging.file.name : ./log/inventory-service.log
