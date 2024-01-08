@@ -1,10 +1,12 @@
 package com.icommerce.catalog.controller;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,6 +84,16 @@ public class ProductControllerTest {
 		catch( Exception e ) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	static final String CURRENT_DIR = "";
+	@Test
+	public void whenUsingJavaNioPaths_thenReturnCurrentDirectory() {
+		String userDirectory = Paths.get("")
+			.toAbsolutePath()
+			.toString();
+		System.out.println(userDirectory);
+		assertTrue(userDirectory.endsWith(CURRENT_DIR));
 	}
 	
 }

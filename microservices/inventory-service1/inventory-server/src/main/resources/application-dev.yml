@@ -5,37 +5,41 @@ management.endpoints.web.exposure.include: "*"
 spring.application.name: inventory-service
 
 app:
-  message: hello inventory service
+  message: Hello 
   prod: false
   defaultPageSize: 10
   #eureka-server: localhost
-  oauth2-host: http://auth-server
+  #oauth2-host: http://auth-server
+  oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth
     
-security:
-  oauth2:
-    client:
-      clientId: inventory-service
-      clientSecret: INVENTORY_SERVICE_PASSWORD
-      accessTokenUri: ${app.oauth2-host}/oauth/token
-      grant-type: client_credentials
-      scope: server
-    resource:
-      userInfoUri: ${app.oauth2-host}/users/current
-
 
 spring:
 #  profiles.active: dev
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
   jpa:
     properties:
       hibernate.format_sql: true
-    generate-ddl: true
-    open-in-view: false         
-    hibernate:                 
-      ddl-auto: create  
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
   h2:
     console:
       enabled: false
       path: /h2-console
+
+#host:
+  #auth-server: https://bycnitsite.westeurope.cloudapp.azure.com/oauth
+
+  security:
+    oauth2:
+      resourceserver:
+        opaque-token:
+          introspection-uri: ${app.oauth2-host}/oauth/check_token
+          client-id: inventory-service
+          client-secret: INVENTORY_SERVICE_PASSWORD
 
 spring.zipkin.baseUrl: http://40.68.201.25:9411
 logging.file.name : ./log/inventory-service.log

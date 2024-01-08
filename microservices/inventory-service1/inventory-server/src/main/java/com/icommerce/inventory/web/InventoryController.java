@@ -57,7 +57,7 @@ public class InventoryController {
 		return inventoryItemService.getByProductId(id);
 	}
 
-	@PreAuthorize("hasAnyAuthority('ADMIN')")
+	//@PreAuthorize("hasAnyAuthority('ADMIN')")
 	@GetMapping("/app-message")
     public String getServiceName(Authentication authentication) {
 		final String userName = authentication.getName();
