@@ -1,4 +1,4 @@
-server.port: 8080
+#server.port: 7002
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -9,12 +9,12 @@ app:
   prod: false
   defaultPageSize: 10
   #eureka-server: localhost
-  oauth2-host: http://auth-server
-  #oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth
+  #oauth2-host: http://auth-server
+  oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth
     
 
 spring:
-  profiles.active: dev
+#  profiles.active: dev
   datasource:
     url: jdbc:h2:mem:mydb
     username: sa

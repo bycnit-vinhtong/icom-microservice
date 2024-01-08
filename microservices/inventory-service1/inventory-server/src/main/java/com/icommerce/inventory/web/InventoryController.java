@@ -1,6 +1,8 @@
 package com.icommerce.inventory.web;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icommerce.inventory.client.InventoryItemDto;
 import com.icommerce.inventory.client.InventoryResponseDTO;
 import com.icommerce.inventory.client.InventorytRequestDto;
-import com.icommerce.inventory.constants.WebConstants;
 import com.icommerce.inventory.service.InventoryItemService;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 
 @RestController
@@ -52,10 +57,18 @@ public class InventoryController {
 		return inventoryItemService.getByProductId(id);
 	}
 
+	//@PreAuthorize("hasAnyAuthority('ADMIN')")
 	@GetMapping("/app-message")
-    public String getServiceName() {
-        return "Message [" + this.appMessage + "]";
+    public String getServiceName(Authentication authentication) {
+		final String userName = authentication.getName();
+		final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+		List<String> roles = authorities.stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.toList());
+		
+        return "Message " + this.appMessage + " " + userName + " Roles: " + roles + "";
     }	
+	
 	
 	@PostMapping("/deduct")
     public InventoryResponseDTO deduct(@RequestBody final InventorytRequestDto requestDTO){

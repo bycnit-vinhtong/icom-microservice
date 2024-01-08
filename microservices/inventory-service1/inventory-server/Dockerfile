@@ -1,7 +1,7 @@
-FROM adoptopenjdk/openjdk11
+FROM openjdk:17-oracle
 
 LABEL author="Tong Thanh Vinh"
 
-ADD target/inventory-server-1.0.1-SNAPSHOT.jar app.jar
+ADD target/*.jar app.jar
 
 ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=docker -jar /app.jar" ]

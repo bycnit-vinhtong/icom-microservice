@@ -1,6 +1,9 @@
 package com.icommerce.inventory;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
+import java.nio.file.Paths;
 
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Test;
@@ -46,4 +49,5 @@ public class ContractRestClientApplicationTest {
 		BDDAssertions.then(personResponseEntity.getBody().getAvailableQuantity()).isEqualTo(10);
 
 	}
+
 }
