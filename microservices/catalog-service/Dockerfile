@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11
+FROM openjdk:17-oracle
 
 LABEL author="Tong Thanh Vinh"
 

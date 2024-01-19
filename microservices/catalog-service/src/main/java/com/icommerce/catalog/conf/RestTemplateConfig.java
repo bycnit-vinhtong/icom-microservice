@@ -1,7 +1,8 @@
 package com.icommerce.catalog.conf;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -13,11 +14,11 @@ public class RestTemplateConfig {
  
   @Bean
   @RequestScope
-  public RestTemplate keycloakRestTemplate(HttpServletRequest inReq) {
+  public RestTemplate icomRestTemplate(HttpServletRequest inReq, RestTemplateBuilder builder) {
     // retrieve the auth header from incoming request
     final String authHeader = 
       inReq.getHeader(HttpHeaders.AUTHORIZATION);
-    final RestTemplate restTemplate = new RestTemplate();
+    final RestTemplate restTemplate = builder.build();
     // add a token if an incoming auth header exists, only
     if (authHeader != null && !authHeader.isEmpty()) {
       // since the header should be added to each outgoing request,
@@ -32,4 +33,5 @@ public class RestTemplateConfig {
     }
     return restTemplate;
   }
+  
 }
