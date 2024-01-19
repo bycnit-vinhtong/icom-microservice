@@ -9,12 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +22,13 @@ import com.icommerce.catalog.dto.Event;
 import com.icommerce.catalog.dto.PageDto;
 import com.icommerce.catalog.dto.ProductDto;
 import com.icommerce.catalog.dto.SearchCriteria;
+import com.icommerce.catalog.event.LogAuditProducer;
 import com.icommerce.catalog.exception.NotFoundException;
 import com.icommerce.catalog.mapper.ProductMapper;
 import com.icommerce.catalog.repository.ProductRepository;
 import com.icommerce.catalog.repository.specifications.ProductSpecification;
 
 @Service
-@EnableBinding(ProductAuditChanel.class)
 public class ProductServiceImpl implements ProductService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -42,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 	ProductMapper productMapper;
 
 	@Autowired
-	ProductAuditChanel productAuditChanel;
+	LogAuditProducer logAuditProducer;
 	
 	@Autowired
 	ProductInventoryService productInventoryService;
@@ -108,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(readOnly = true)
 	@Override
 	public PageDto<ProductDto> findProductsByCriterias(SearchCriteria searchCriteria) {
-		//logSearchCriteria(searchCriteria, null, Event.Type.SEARCH);
+		logSearchCriteria(searchCriteria, null, Event.Type.SEARCH);
 		if (StringUtils.isEmpty(searchCriteria.getSortField())) {
 			searchCriteria.setSortField(ProductField.NAME.label);
 		}
@@ -139,7 +137,7 @@ public class ProductServiceImpl implements ProductService {
 	//Demo ASYNC with Rappid MQ
 	private void logSearchCriteria(SearchCriteria criteria, Long productId, Event.Type event) {
 		logger.info("Log search data...{}", criteria);
-		productAuditChanel.outputAudit().send(MessageBuilder.withPayload(new Event(event, productId, criteria)).build());
+		logAuditProducer.logAudit(criteria, productId, event);
 	}
 
     @Override

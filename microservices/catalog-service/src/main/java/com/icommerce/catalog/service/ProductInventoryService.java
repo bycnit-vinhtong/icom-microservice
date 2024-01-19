@@ -4,24 +4,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestTemplate;
 
 //import com.icommerce.catalog.client.InventoryFeignServiceClient;
 import com.icommerce.inventory.client.InventoryItemDto;
 import com.icommerce.inventory.client.InventoryService;
 import com.icommerce.inventory.client.InventorytRequestDto;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.RetryRegistry;
+import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class ProductInventoryService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
-
+	private static final Logger LOG = LoggerFactory.getLogger(ProductInventoryService.class);
 
 	@Autowired
-	OAuth2RestTemplate orestTemplate;
+	RestTemplate restTemplate;
 
 	@Value("${app.inventory-service.host}")
 	private String inventoryServiceUri;
@@ -41,26 +45,29 @@ public class ProductInventoryService {
 	}*/
 	
 	// Demo SYCN request to inventory service via Discovery Service name
-	@HystrixCommand(fallbackMethod = "fallback")
+	@Retry(name = "default")
+	@Bulkhead(name = "inventoryService")
+	@CircuitBreaker(name = "default", fallbackMethod = "fallback")
 	public int getInventoryUsingRestTemplate(final Long productId) {
 		LOG.info("getting inventory object ... ");
 		// get Basket
-		InventoryItemDto inventory = orestTemplate.getForObject(inventoryServiceUri + "/" + productId,
+		InventoryItemDto inventory = restTemplate.getForObject(inventoryServiceUri + "/" + productId,
 				InventoryItemDto.class);
 
 		LOG.info("Returning inventory ... ");
 		return inventory.getAvailableQuantity();
 	}
 	
-	@HystrixCommand(fallbackMethod = "fallback")
 	public com.icommerce.inventory.client.InventoryItemDto getInventoryUsingSharedClientPackage(final Long productId) {
 		LOG.info("Returning inventory fallback rest client... ");
-		return InventoryService.client(orestTemplate).getInventory(new InventorytRequestDto(1L , "PD1", 1L, 1L));
+		return InventoryService.client(restTemplate).getInventory(new InventorytRequestDto(1L , "PD1", 1L, 1L));
 	}
 
-	public int fallback(Long productId) {
+	public int fallback(Long productId, CallNotPermittedException e) {
 		LOG.info("Returning fall ... ");
 		return 0;
 	}
+
+
 
 }
