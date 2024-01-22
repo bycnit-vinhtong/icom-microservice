@@ -20,16 +20,19 @@ helm del auth-server
 helm upgrade  auth-server ./icom/auth-server
 helm install  auth-server ./icom/auth-server
 
-docker build -t 1983vi/icom-inventory-service:v1.0.0 -f ./Dockerfile .
-docker push 1983vi/icom-inventory-service:v1.0.0
-kubectl exec -it  catalog-service-bc85f975c-5qkg6 -n kube-public -- /bin/bash
+
+kubectl exec -it  inventory-service-d5b6c6d9c-58h6v -n kube-public -- /bin/bash
+docker build -t 1983vi/icom-inventory-service:v1.1.0 -f ./Dockerfile .
+docker push 1983vi/icom-inventory-service:v1.1.0
+
 helm del inventory-service
 helm install inventory-service ./icom/inventory-service
 helm upgrade inventory-service ./icom/inventory-service
 
 
-docker build -t 1983vi/icom-catalog-service:v1.0.0 -f ./Dockerfile .
-docker push 1983vi/icom-catalog-service:v1.0.0
+kubectl exec -it  catalog-service-697584486c-hmdpd -n kube-public -- /bin/bash
+docker build -t 1983vi/icom-catalog-service:v1.2.0 -f ./Dockerfile .
+docker push 1983vi/icom-catalog-service:v1.2.0
 helm del catalog-service
 helm install catalog-service ./icom/catalog-service
 helm upgrade catalog-service ./icom/catalog-service

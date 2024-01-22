@@ -35,6 +35,7 @@ public class ContractRestClientApplicationTest {
 
 	@Test
 	public void get_inventory_from_service_contract() {
+		System.out.println("get_inventory_from_service_contract");
 		// given:
 		RestTemplate restTemplate = new RestTemplate();
 

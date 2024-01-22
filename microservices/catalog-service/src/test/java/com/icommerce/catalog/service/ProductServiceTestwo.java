@@ -1,7 +1,6 @@
 package com.icommerce.catalog.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -18,8 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import com.icommerce.catalog.dto.ProductDto;
 
 @SpringBootTest
-@RunWith(PowerMockRunner.class)
-public class ProductServiceTest2 {
+@RunWith(PowerMockRunner.class) 
+public class ProductServiceTestwo {
 
 	@InjectMocks
 	ProductServiceImpl productService;
@@ -31,7 +30,7 @@ public class ProductServiceTest2 {
 	@Test
 	@DisplayName("Test get an existing product")
 	public void testGetProductFound() {
-		Long productId = 1L;
+		Long productId = 1L; 
 		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(1L);
 		ProductDto result = productService.getProduct(productId);
 		Assertions.assertNotNull(result, "The product must existing");
