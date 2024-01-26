@@ -2,11 +2,9 @@ package com.icommerce.inventory.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -28,17 +26,17 @@ public class GlobalSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests()
-                .anyRequest()
-                .authenticated();
-        http
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(keycloakJwtTokenConverter);
-        http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeHttpRequests(
+                authorize -> authorize
+                .requestMatchers("/" , "/app-message").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
+                .anyRequest().authenticated());
+
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                        .jwtAuthenticationConverter(keycloakJwtTokenConverter)
+                ));
+
         return http.build(); 
     }
 }
