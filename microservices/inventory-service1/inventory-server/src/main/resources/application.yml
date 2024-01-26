@@ -1,4 +1,4 @@
-server.port: 8080
+server.port: 7002
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -10,11 +10,10 @@ app:
   defaultPageSize: 10
   #eureka-server: localhost
   oauth2-host: http://auth-server
-  #oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth
     
 
 spring:
-  profiles.active: dev
+#  profiles.active: dev
   datasource:
     url: jdbc:h2:mem:mydb
     username: sa
@@ -30,16 +29,11 @@ spring:
       enabled: false
       path: /h2-console
 
-#host:
-  #auth-server: https://bycnitsite.westeurope.cloudapp.azure.com/oauth
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://localhost:8000/auth/realms/spmia-realm
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
-  security:
-    oauth2:
-      resourceserver:
-        opaque-token:
-          introspection-uri: ${app.oauth2-host}/oauth/check_token
-          client-id: inventory-service
-          client-secret: INVENTORY_SERVICE_PASSWORD
+token.converter.principal-attribute: preferred_username
+token.converter.resource-id: ostock
 
 spring.zipkin.baseUrl: http://40.68.201.25:9411
 logging.file.name : ./log/inventory-service.log
