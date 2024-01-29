@@ -1,0 +1,96 @@
+server.port: 8001
+spring.application.name: catalog-service
+management.endpoint.health.show-details: ALWAYS
+management.endpoints.web.exposure.include: '*'
+#logging:
+app:
+   message: Catalog service
+   prod: false
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+   defaultPageSize: 10
+   ms-host: bycnit.site
+   inventory-service:
+      host: http://localhost:8002
+   #eureka-server: localhost
+   #zipkin-host: 40.68.201.25
+   oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth   
+
+spring.main.allow-bean-definition-overriding: true
+spring:
+   datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+   jpa:
+    properties:
+      hibernate.format_sql: true
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+   h2:
+    console:
+      enabled: false
+      path: /h2-console
+
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://172.19.112.1:8000/auth/realms/spmia-realm
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+token.converter.principal-attribute: preferred_username
+token.converter.resource-id: ostock
+
+spring.cloud.stream:
+   defaultBinder: kafka
+   bindings:
+      output-audit:
+         destination: auditSupportTopic
+         contentType: application/json
+spring.cloud.stream.kafka.binder.brokers: localhost:29092
+
+spring.zipkin.baseUrl: http://40.68.201.25:9411
+management.tracing.sampling.probability: 1.0
+management.zipkin.tracing.endpoint: http://40.68.201.25:9411/api/v2/spans 
+   
+hystrix:
+   command:
+      default:
+         execution:
+            isolation:
+               thread:
+                  timeoutInMilliseconds: 10000
+feign.hystrix.enabled: true
+
+logging.level.org.springframework.web.servlet.DispatcherServlet: TRACE
+logging.pattern.level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+logging.file.name : ./log/catalog-service.log
+logging.file.path: ./log
+
+resilience4j.retry.instances.default.maxAttempts: 3
+resilience4j.retry.instances.default.waitDuration: 5s
+resilience4j.circuitbreaker.instances.default.failure-rate-threshold: 50
+resilience4j.circuitbreaker.instances.default.minimum-number-of-calls: 5
+resilience4j.circuitbreaker.instances.default.automatic-transition-from-open-to-half-open-enabled: true
+resilience4j.circuitbreaker.instances.default.wait-duration-in-open-state: 15s
+resilience4j.circuitbreaker.instances.default.permitted-number-of-calls-in-half-open-state: 3
+resilience4j.circuitbreaker.instances.default.sliding-window-size: 10
+resilience4j.circuitbreaker.instances.default.sliding-window-type: count_based
+
+resilience4j.bulkhead.instances.inventoryService.maxConcurrentCalls: 10
+resilience4j.bulkhead.instances.inventoryService.maxWaitDuration: 10ms
+resilience4j.bulkhead.instances.inventoryService.maxQueueSize: 10
+resilience4j.ratelimiter.instances.squareLimit.limitForPeriod: 5
+resilience4j.ratelimiter.instances.squareLimit.limitRefreshPeriod: 60s
+resilience4j.ratelimiter.instances.squareLimit.timeoutDuration: 0s 
+---
+#spring.profiles: docker
+#spring.rabbitmq.host: rabbitmq
+#app.eureka-server: service-discovery
+#app.oauth2-host: auth-service
+# ----------------
+# Orphan comments:
+# ----------------
+# Was at begin of line:86 :#hystrix.metrics.enabled: true
+# Was at begin of line:88 :#spring.zipkin.base-url: http://${app.zipkin-host}:9411

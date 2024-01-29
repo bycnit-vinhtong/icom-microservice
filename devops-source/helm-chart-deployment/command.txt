@@ -20,7 +20,7 @@ helm del auth-server
 helm upgrade  auth-server ./icom/auth-server
 helm install  auth-server ./icom/auth-server
 
-docker build -t 1983vi/icom-inventory-service:v1.0.0 -f ./Dockerfile .
+docker build -t 1983vi/icom-inventory-service:v2.0.0 -f ./Dockerfile .
 docker push 1983vi/icom-inventory-service:v1.0.0
 kubectl exec -it  catalog-service-bc85f975c-5qkg6 -n kube-public -- /bin/bash
 helm del inventory-service
