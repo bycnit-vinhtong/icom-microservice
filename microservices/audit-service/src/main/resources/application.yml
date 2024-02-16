@@ -1,4 +1,4 @@
-#server.port: 7003
+server.port: 7003
 spring.application.name: audit-service
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -15,7 +15,18 @@ spring:
     console:
       enabled: false
       path: /h2-console
-
+  cloud:
+    function:
+      definition: catalogAudit  
+    stream:
+      default.contentType: application/json
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        catalogAudit-in-0:
+            content-type: application/json
+            destination : catalog-audit-topic 
 #logging:
 #  level:
 #    org:
@@ -40,31 +51,10 @@ eureka:
 ribbon.ServerListRefreshInterval: 5000
 ribbon.NFLoadBalancerPingInterval: 5
 
-spring.cloud.stream:
-  defaultBinder: rabbit
-  default.contentType: application/json
-  bindings:
-    input-product:
-      destination: audit-support
-      group: auditGroup
 
-spring.cloud.stream.bindings.input.consumer:
-  maxAttempts: 3
-  backOffInitialInterval: 500
-  backOffMaxInterval: 1000
-  backOffMultiplier: 2.0
 
-spring.cloud.stream.rabbit.bindings.input.consumer:
-  autoBindDlq: true
-  republishToDlq: true
-
-spring.rabbitmq:
-   host: rabbitmq-server
-   port: 5672
-   username: admin
-   password: bycnit#123
         
-spring.zipkin.baseUrl: http://zipkin-server:9411
+#spring.zipkin.baseUrl: http://zipkin-server:9411
 logging.file.name : ./log/audit-service.log
 logging.level.org.springframework.web.servlet.DispatcherServlet: TRACE
 

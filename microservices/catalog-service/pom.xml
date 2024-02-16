@@ -24,6 +24,7 @@
 		<spring-cloud-contract.version>2.1.1.RELEASE</spring-cloud-contract.version>
 		<org.projectlombok.version>1.18.22</org.projectlombok.version>
 		<spring-cloud-stream.version>4.0.2</spring-cloud-stream.version>
+		 <jackson.version>2.15.2</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -87,6 +88,10 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-stream-binder-kafka</artifactId>
 			<version>${spring-cloud-stream.version}</version> 
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-kafka-streams</artifactId>
 		</dependency>
 		<!--<dependency>
 			<groupId>org.springframework.amqp</groupId>
@@ -161,11 +166,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-stream-test-support</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency>--> 
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -211,7 +216,18 @@
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>6.3</version>
 		</dependency>-->
+		<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
+        <!-- support for "Java 8 Dates" -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -237,7 +253,7 @@
 		</profile>
 
 		<profile>
-			<id>docker</id>
+			<id>docker</id> 
 			<properties>
 				<activatedProperties>docker</activatedProperties>
 			</properties>

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.icommerce.catalog.conf.RestTemplateConfig;
 import com.icommerce.catalog.constants.WebConstants;
 import com.icommerce.catalog.dto.ComputeResponse;
+import com.icommerce.catalog.dto.MessageDto;
 import com.icommerce.catalog.dto.PageDto;
 import com.icommerce.catalog.dto.ProductDto;
 import com.icommerce.catalog.dto.SearchCriteria;
+import com.icommerce.catalog.event.LogAuditProducer;
 import com.icommerce.catalog.service.ProductInventoryService;
 import com.icommerce.catalog.service.ProductService;
 import com.icommerce.catalog.web.validator.ParametValidator;
@@ -58,6 +61,12 @@ public class ProductController {
 	@Autowired
 	private RestTemplateConfig restTemplateConfig;
 
+	@Autowired
+    private StreamBridge streamBridge;
+
+	@Autowired
+	private LogAuditProducer logAuditProducer;
+
 	/**
 	 * Find product by criteria
 	 *
@@ -96,6 +105,14 @@ public class ProductController {
 		return productInventoryService.getInventoryUsingSharedClientPackage(1L);
     }
 	
+
+	@GetMapping("/send-message")
+    public String sendMessage() {
+	    //streamBridge.send("producer-out-0"," jack from Stream bridge");
+		//logAuditProducer.producer();
+		logAuditProducer.sendMessage();
+		return "OK";
+	}
 	
 	@GetMapping("/crash")
     public void testCrash() {

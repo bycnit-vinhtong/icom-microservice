@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.icommerce.catalog.constants.ProductField;
 import com.icommerce.catalog.domain.Product;
-import com.icommerce.catalog.dto.Event;
+import com.icommerce.catalog.dto.EventCatalog;
 import com.icommerce.catalog.dto.PageDto;
 import com.icommerce.catalog.dto.ProductDto;
 import com.icommerce.catalog.dto.SearchCriteria;
@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductDto getProduct(long productId) {
 	    logger.info("get product details - process started");
-		logSearchCriteria(null, productId, Event.Type.VIEW);
+		logSearchCriteria(null, productId, EventCatalog.Type.VIEW);
 		final Optional<Product> product = productRepository.findById(productId);
 		if (product.isPresent()) {
 			ProductDto  productDto = productMapper.entityToDto(product.get());
@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(readOnly = true)
 	@Override
 	public PageDto<ProductDto> findProductsByCriterias(SearchCriteria searchCriteria) {
-		logSearchCriteria(searchCriteria, null, Event.Type.SEARCH);
+		logSearchCriteria(searchCriteria, null, EventCatalog.Type.SEARCH);
 		if (StringUtils.isEmpty(searchCriteria.getSortField())) {
 			searchCriteria.setSortField(ProductField.NAME.label);
 		}
@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	//Demo ASYNC with Rappid MQ
-	private void logSearchCriteria(SearchCriteria criteria, Long productId, Event.Type event) {
+	private void logSearchCriteria(SearchCriteria criteria, Long productId, EventCatalog.Type event) {
 		logger.info("Log search data...{}", criteria);
 		logAuditProducer.logAudit(criteria, productId, event);
 	}

@@ -11,12 +11,12 @@ app:
 #      hibernate:
 #        SQL: debug
    defaultPageSize: 10
-   ms-host: bycnit.site
+   #ms-host: bycnit.site
    inventory-service:
       host: http://localhost:8002
    #eureka-server: localhost
    #zipkin-host: 40.68.201.25
-   oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth   
+   #oauth2-host: https://bycnitsite.westeurope.cloudapp.azure.com/oauth   
 
 spring.main.allow-bean-definition-overriding: true
 spring:
@@ -35,23 +35,42 @@ spring:
       enabled: false
       path: /h2-console
 
+   cloud:
+    function:
+      definition: consumer;producer   
+    stream:
+      default.contentType: application/json
+      kafka:
+        binder:
+          brokers: localhost:9092
+            
+      bindings:
+        catalog-audit-out-0:
+            content-type: application/json
+            destination : catalog-audit-topic      
+        producer-out-0:
+            content-type: application/json
+            destination : first-topic
+            producer.requiredGroups: messageGroup
+        consumer-in-0:
+            content-type: application/json
+            destination : first-topic
+            group: messageGroup
+            consumer:
+              maxAttempts: 5
+              backOffInitialInterval: 1000
+              backOffMaxInterval: 2000
+              backOffMultiplier: 3.0
+              #use-native-decoding: true # This enables using the custom deserializer
 spring.security.oauth2.resourceserver.jwt.issuer-uri: http://172.19.112.1:8000/auth/realms/spmia-realm
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 token.converter.principal-attribute: preferred_username
 token.converter.resource-id: ostock
 
-spring.cloud.stream:
-   defaultBinder: kafka
-   bindings:
-      output-audit:
-         destination: auditSupportTopic
-         contentType: application/json
-spring.cloud.stream.kafka.binder.brokers: localhost:29092
-
-spring.zipkin.baseUrl: http://40.68.201.25:9411
+spring.zipkin.baseUrl: http://172.19.112.1:9411
 management.tracing.sampling.probability: 1.0
-management.zipkin.tracing.endpoint: http://40.68.201.25:9411/api/v2/spans 
+management.zipkin.tracing.endpoint: http://localhost:9411/api/v2/spans 
    
 hystrix:
    command:

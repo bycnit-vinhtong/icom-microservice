@@ -2,19 +2,22 @@ package com.icommerce.audit.service;
 
 import java.io.IOException;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icommerce.audit.dto.AuditLogDto;
 import com.icommerce.audit.dto.Event;
 import com.icommerce.audit.dto.SearchCriteria;
+import java.util.function.Consumer;
+import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@EnableBinding(ProductAuditChanelSink.class)
+@Component
 public class MessageAuditProcessor {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MessageAuditProcessor.class);
@@ -22,7 +25,13 @@ public class MessageAuditProcessor {
 	@Autowired
 	AuditLogService auditLogService;
 
-	@StreamListener(target = ProductAuditChanelSink.INPUT)
+   	@Bean
+   	public Consumer<Message<Event<Integer, SearchCriteria>>> catalogAudit() {
+      return event -> {
+		 process(event.getPayload());
+      };
+   	}
+
 	public void process(Event<Integer, SearchCriteria> event) {
 		if (event != null && event.getEventType() != null) {
 			LOG.info("Process message created at {}...", event.getEventCreatedAt());
