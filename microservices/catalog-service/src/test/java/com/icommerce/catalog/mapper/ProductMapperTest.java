@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import com.icommerce.catalog.domain.Brand;
 import com.icommerce.catalog.domain.Product;
 import com.icommerce.catalog.dto.BrandDto;
-import com.icommerce.catalog.dto.ProductDto;
+import com.icommerce.catalog.dto.ProductShoppingResponseDto;
 import com.icommerce.catalog.mapper.ProductMapper;
 
 public class ProductMapperTest {
@@ -26,7 +26,7 @@ public class ProductMapperTest {
 		
 		entity.setBrand(brand);
 
-		ProductDto productDto = Mappers.getMapper(ProductMapper.class).entityToDto(entity);
+		ProductShoppingResponseDto productDto = Mappers.getMapper(ProductMapper.class).entityToDto(entity);
 
 		assertEquals(productDto.getId().longValue(), entity.getId().longValue());
 		assertEquals(productDto.getName(), entity.getName());
@@ -35,7 +35,7 @@ public class ProductMapperTest {
 	@Test
 	public void givenProductDtoToProductEntity_whenMaps_thenCorrect() {
 
-		ProductDto productDto = new ProductDto();
+		ProductShoppingResponseDto productDto = new ProductShoppingResponseDto();
 		productDto.setId(1L);
 		productDto.setName("Fortuner");
 		

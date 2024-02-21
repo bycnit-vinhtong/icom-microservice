@@ -8,7 +8,9 @@ app:
   prod: false
   defaultPageSize: 10
   #eureka-server: localhost
-  oauth2-host: http://auth-server
+  #oauth2-host: http://auth-server
+  ms-dns: 172.19.112.1
+  catalog-service-host: http://${app.ms-dns}:7001
     
 
 spring:
@@ -27,16 +29,25 @@ spring:
     console:
       enabled: false
       path: /h2-console
-
-spring.security.oauth2.resourceserver.jwt.issuer-uri: http://172.19.112.1:8000/auth/realms/spmia-realm
+  cache:
+    type: redis
+  data.redis:
+    host: ${app.ms-dns}
+    port: 6379
+  config:
+    entryTtl: 60
+  
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://${app.ms-dns}:8000/auth/realms/spmia-realm
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+
 
 token.converter.principal-attribute: preferred_username
 token.converter.resource-id: ostock
 
-spring.zipkin.baseUrl: http://172.19.112.1:9411
+spring.zipkin.baseUrl: http://${app.ms-dns}:9411
 management.tracing.sampling.probability: 1.0
-management.zipkin.tracing.endpoint: http://172.19.112.1:9411/api/v2/spans
+management.zipkin.tracing.endpoint: http://${app.ms-dns}:9411/api/v2/spans
 logging.file.name : ./log/inventory-service.log
 logging.level.org.springframework.web.servlet.DispatcherServlet: TRACE
 logging.level.org.springframework.security: DEBUG

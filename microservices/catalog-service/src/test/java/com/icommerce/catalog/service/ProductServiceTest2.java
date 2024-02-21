@@ -15,7 +15,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
-import com.icommerce.catalog.dto.ProductDto;
+import com.icommerce.catalog.dto.ProductShoppingResponseDto;
 
 @SpringBootTest
 @RunWith(PowerMockRunner.class)
@@ -33,7 +33,7 @@ public class ProductServiceTest2 {
 	public void testGetProductFound() {
 		Long productId = 1L;
 		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(1L);
-		ProductDto result = productService.getProduct(productId);
+		ProductShoppingResponseDto result = productService.getProduct(productId);
 		Assertions.assertNotNull(result, "The product must existing");
 		assertEquals("1", String.valueOf(result.getId()), "The product must equal 1");
 		assertEquals("PD1", result.getProductCode(), "The product must equal PD1");

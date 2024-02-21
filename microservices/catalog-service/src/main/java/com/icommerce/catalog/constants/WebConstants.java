@@ -9,7 +9,9 @@ public interface WebConstants {
     public interface View {
         String USER = "user";
 
-        String PRODUCT = "product";
+        String PRODUCTFRONT = "/front/product";
+
+        String PRODUCTBACK = "/back/product";
 
         String AUTH = "auth";
     }

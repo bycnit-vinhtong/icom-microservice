@@ -1,5 +1,17 @@
 version: '3.9'
 services:
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: bycnit#123
+      PGDATA: /data/postgres
+    volumes:
+       - ./postgres-data:/data/postgres
+    ports:
+      - "5432:5432"
+
   keycloak:
     image: jboss/keycloak
     restart: always
@@ -75,3 +87,7 @@ services:
       - "8002:8002"
     extra_hosts:
       - "host.docker.internal:host-gateway"       
+  redisserver:
+    image: redis:alpine
+    ports:
+      - 6379:6379

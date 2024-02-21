@@ -1,7 +1,8 @@
 package com.icommerce.catalog.service;
 
 import com.icommerce.catalog.dto.PageDto;
-import com.icommerce.catalog.dto.ProductDto;
+import com.icommerce.catalog.dto.ProductInfoResponseDto;
+import com.icommerce.catalog.dto.ProductShoppingResponseDto;
 import com.icommerce.catalog.dto.SearchCriteria;
 
 public interface ProductService {
@@ -11,14 +12,14 @@ public interface ProductService {
 	 * @param productId
 	 * @return the product, if created successfull, else null
 	 */
-	ProductDto createProduct(ProductDto productDto);
+	ProductShoppingResponseDto createProduct(ProductShoppingResponseDto productDto);
 	
 	/**
 	 * Update a product
 	 * @param productId
 	 * @return the product, if update successfull, else null
 	 */
-	ProductDto updateProduct(ProductDto productDto);
+	ProductShoppingResponseDto updateProduct(ProductShoppingResponseDto productDto);
 	
 
 	/**
@@ -26,7 +27,7 @@ public interface ProductService {
 	 * @param productId
 	 * @return the product, if found, else null
 	 */
-	ProductDto getProduct(long productId);
+	ProductShoppingResponseDto getProduct(long productId);
 
 	/**
 	 * Delete Product by ID
@@ -39,9 +40,17 @@ public interface ProductService {
 	 * Find product by criterias
 	 * @return  PageDto<ProductDto>
 	 */
-	PageDto<ProductDto> findProductsByCriterias(SearchCriteria searchCriteria);
+	PageDto<ProductShoppingResponseDto> findProductsByCriterias(SearchCriteria searchCriteria);
 	
 	
 	void testCrash();
+
+
+	/**
+	 * Get product info by ID for back office 
+	 * @param productId
+	 * @return the product, if found, else null
+	 */
+	ProductInfoResponseDto getProductInfo(long productId);
 	
 }

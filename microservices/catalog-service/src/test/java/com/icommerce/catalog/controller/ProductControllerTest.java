@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icommerce.catalog.CatalogServiceTestsApp;
 import com.icommerce.catalog.dto.BrandDto;
 import com.icommerce.catalog.dto.CategoryDto;
-import com.icommerce.catalog.dto.ProductDto;
+import com.icommerce.catalog.dto.ProductShoppingResponseDto;
 import com.icommerce.catalog.service.ProductService;
 
 @ExtendWith(SpringExtension.class)
@@ -45,7 +45,7 @@ public class ProductControllerTest {
 	
 	@Test
 	public void testInventoryClient() {
-		ProductDto product = productService.getProduct(1L);
+		ProductShoppingResponseDto product = productService.getProduct(1L);
 		//assertEquals(1L, product.getId());
 	}
 	
@@ -53,7 +53,7 @@ public class ProductControllerTest {
 	@DisplayName("GET product/1 - Found")
 	public void testGetApplicaitonByIdFound() throws Exception {
 		
-		ProductDto mockProductDto = new ProductDto();
+		ProductShoppingResponseDto mockProductDto = new ProductShoppingResponseDto();
 		mockProductDto.setProductCode("PD1");
 		mockProductDto.setName("Badminton bracket1");
 		mockProductDto.setPrice( new BigDecimal(50.5));

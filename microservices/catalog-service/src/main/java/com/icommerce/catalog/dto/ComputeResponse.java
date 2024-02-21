@@ -1,6 +1,6 @@
 package com.icommerce.catalog.dto;
 
-import com.icommerce.catalog.web.ProductController.ResponseType;
+import com.icommerce.catalog.web.ProductFrontController.ResponseType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

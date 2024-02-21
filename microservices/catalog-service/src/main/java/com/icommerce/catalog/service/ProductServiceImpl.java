@@ -20,7 +20,8 @@ import com.icommerce.catalog.constants.ProductField;
 import com.icommerce.catalog.domain.Product;
 import com.icommerce.catalog.dto.EventCatalog;
 import com.icommerce.catalog.dto.PageDto;
-import com.icommerce.catalog.dto.ProductDto;
+import com.icommerce.catalog.dto.ProductInfoResponseDto;
+import com.icommerce.catalog.dto.ProductShoppingResponseDto;
 import com.icommerce.catalog.dto.SearchCriteria;
 import com.icommerce.catalog.event.LogAuditProducer;
 import com.icommerce.catalog.exception.NotFoundException;
@@ -55,21 +56,21 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
 	@Override
-	public ProductDto createProduct(ProductDto productDto) {
-		Product product = productMapper.dtoToEntity(productDto);
+	public ProductShoppingResponseDto createProduct(ProductShoppingResponseDto productDto) {
+		Product product = productMapper.shoppingDtoToEntity(productDto);
 		product = productRepository.save(product);
-		return productMapper.entityToDto(product);
+		return productMapper.entityToShoppingDto(product);
 	}
 
 	@Transactional
 	@Override
-	public ProductDto updateProduct(ProductDto productDto) {
+	public ProductShoppingResponseDto updateProduct(ProductShoppingResponseDto productDto) {
 
 		final Optional<Product> product = productRepository.findById(productDto.getId());
 		if (product.isPresent()) {
-			Product productResult = productMapper.dtoToEntity(productDto);
+			Product productResult = productMapper.shoppingDtoToEntity(productDto);
 			productResult = productRepository.save(productResult);
-			return productMapper.entityToDto(productResult);
+			return productMapper.entityToShoppingDto(productResult);
 		} else {
 			throw new NotFoundException(Product.class, productDto.getId());
 		}
@@ -77,12 +78,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public ProductDto getProduct(long productId) {
+	public ProductShoppingResponseDto getProduct(long productId) {
 	    logger.info("get product details - process started");
 		logSearchCriteria(null, productId, EventCatalog.Type.VIEW);
 		final Optional<Product> product = productRepository.findById(productId);
 		if (product.isPresent()) {
-			ProductDto  productDto = productMapper.entityToDto(product.get());
+			ProductShoppingResponseDto  productDto = productMapper.entityToShoppingDto(product.get());
 			productDto.setQuantity(productInventoryService.getInventoryUsingRestTemplate(productDto.getId()));
 			logger.info("get product details - product found");
 			return productDto;
@@ -105,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public PageDto<ProductDto> findProductsByCriterias(SearchCriteria searchCriteria) {
+	public PageDto<ProductShoppingResponseDto> findProductsByCriterias(SearchCriteria searchCriteria) {
 		logSearchCriteria(searchCriteria, null, EventCatalog.Type.SEARCH);
 		if (StringUtils.isEmpty(searchCriteria.getSortField())) {
 			searchCriteria.setSortField(ProductField.NAME.label);
@@ -125,9 +126,9 @@ public class ProductServiceImpl implements ProductService {
 
 		Page<Product> page = productRepository.findAll(searchSpecification, pageable);
 
-		List<ProductDto> productDtoList = new ArrayList<>();
+		List<ProductShoppingResponseDto> productDtoList = new ArrayList<>();
 		for (Product product : page.getContent()) {
-			ProductDto productDto = productMapper.entityToDto(product);
+			ProductShoppingResponseDto productDto = productMapper.entityToShoppingDto(product);
 			productDto.setQuantity(productInventoryService.getInventoryUsingRestTemplate(productDto.getId()));
 			productDtoList.add(productDto);
 		}
@@ -147,6 +148,19 @@ public class ProductServiceImpl implements ProductService {
         Integer z;
         z = x/y;
     }
+
+	@Override
+	public ProductInfoResponseDto getProductInfo(long productId) {
+		final Optional<Product> product = productRepository.findById(productId);
+		if (product.isPresent()) {
+			ProductInfoResponseDto  productDto = productMapper.entityToInfoDto(product.get());
+			logger.info("get product details - product found");
+			return productDto;
+		} else {
+		    logger.info("get product details - product not found");
+			throw new NotFoundException(Product.class, productId);
+		}
+	}
 
 	
 

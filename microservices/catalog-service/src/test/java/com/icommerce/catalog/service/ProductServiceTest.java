@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.icommerce.catalog.CatalogServiceTestsApp;
 import com.icommerce.catalog.dto.PageDto;
-import com.icommerce.catalog.dto.ProductDto;
+import com.icommerce.catalog.dto.ProductShoppingResponseDto;
 import com.icommerce.catalog.dto.SearchCriteria;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -51,7 +51,7 @@ public class ProductServiceTest {
 	void testGetProductFound() {
 		Long productId = 1L;
 		Mockito.doReturn(0).when(productInventoryService).getInventoryUsingRestTemplate(1L);
-		ProductDto result = productService.getProduct(productId);
+		ProductShoppingResponseDto result = productService.getProduct(productId);
 		Assertions.assertNotNull(result, "The product must existing");
 		assertEquals("1", String.valueOf(result.getId()), "The product must equal 1");
 		assertEquals("PD1", result.getProductCode(), "The product must equal PD1");
@@ -77,7 +77,7 @@ public class ProductServiceTest {
 		SearchCriteria searchCriteria = new SearchCriteria("bracket");
 		Map<String, Object> filters = new HashMap<>();
 		searchCriteria.setFilters(filters);
-		PageDto<ProductDto> result = productService.findProductsByCriterias(searchCriteria);
+		PageDto<ProductShoppingResponseDto> result = productService.findProductsByCriterias(searchCriteria);
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(2L, result.getTotalElements());
 	}
@@ -89,7 +89,7 @@ public class ProductServiceTest {
 		SearchCriteria searchCriteria = new SearchCriteria("abasdf asdf");
 		Map<String, Object> filters = new HashMap<>();
 		searchCriteria.setFilters(filters);
-		PageDto<ProductDto> result = productService.findProductsByCriterias(searchCriteria);
+		PageDto<ProductShoppingResponseDto> result = productService.findProductsByCriterias(searchCriteria);
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(0L, result.getTotalElements());
 	}
@@ -103,7 +103,7 @@ public class ProductServiceTest {
 		filters.put("brand", 1);
 		filters.put("category", 1);
 		searchCriteria.setFilters(filters);
-		PageDto<ProductDto> result = productService.findProductsByCriterias(searchCriteria);
+		PageDto<ProductShoppingResponseDto> result = productService.findProductsByCriterias(searchCriteria);
 		Assertions.assertNotNull(result);
 		if(result.getTotalPages() > 0) {
 			Assertions.assertEquals(1, result.getContent().get(0).getBrand().getId().longValue());
