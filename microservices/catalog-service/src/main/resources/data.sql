@@ -24,6 +24,7 @@ INSERT INTO product (id, product_code, name, price, currency, description, pictu
 	
 INSERT INTO product (id, product_code, name, price, currency, description, picture_file_name, picture_uri, brand_id, category_id, color)
 	VALUES (5, 'PD5' ,'TShirtXXL', 60.5, 'USD', 'Very nice bracker', 'picture3.jpg', '/images/picture5.jpg', 1, 2, 'colorful');
-	
+
+
 	
 	

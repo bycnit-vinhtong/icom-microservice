@@ -13,15 +13,15 @@ app:
 spring.main.allow-bean-definition-overriding: true
 spring:
    datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/catalog
+    username: admin
+    password: bycnit#123
    jpa:
     properties:
-      hibernate.format_sql: true
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
+      hibernate..jdbc.lob.non_contextual_creation: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate.ddl-auto: create
+    show-sql: true
    h2:
     console:
       enabled: false

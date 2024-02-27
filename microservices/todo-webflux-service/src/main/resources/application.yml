@@ -1,0 +1,21 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/todo-db
+    username: admin
+    password: bycnit#123
+  jpa:
+    properties:
+      hibernate.format_sql: true
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+springdoc:
+  swagger-ui:
+    path: /api
+
+server:
+  port: 7003
+  jetty:
+    threads:
+      acceptors: 500
+    connection-idle-timeout: 60000
+    
